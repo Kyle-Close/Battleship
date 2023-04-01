@@ -1,0 +1,43 @@
+Check out Font Awesome for Icons
+
+
+Landing Page
+-------------------
+1. Dark Theme
+2. Title at the top of the Page
+3. Somewhere in the center of the page - 'Single Player', '2 Player'
+    3a) if they choose SP, then prompt them to type in there name and have a play button below
+    3b) if they choose 2 player, then prompt both players to enter names 1 by 1. After second player enters name, enable the play button
+4. Have a link to the source code near the bottom of the page
+5. 'Made by Kyle Close' at the bottom of the page 
+
+After 'Play' has been clicked (2 Player)
+-----------------------------------------
+1. Display a modal. Modal will have the board, Player 1's name, a display of the ship size that is being placed, and a tool tip on how to place.
+2. Start with the biggest ship and once 1 is placed we go to the next smallest size.
+3. Have an 'Undo' button for when a ship is placed it will pop it off the board and everything will change to now show the last ship that was taken off.
+    3a) Unsure if I want to have multiple undo's. Would be nice to have but could be difficult to implement.
+4. Have a 'Confirm' button to lock in ship placement. Button will be unable to click unless all 5 ships are placed.
+5. Ships cannot be placed next to each other. All surrounding squares are unavailable once a ship is placed there.
+6. Repeat this process again for player 2.
+
+After All ships are placed
+-----------------------------------------
+1. Choose a random player to Start
+2. Starting players board is shown on left with their ship placements
+3. Opposing players board is shown on right. Opposing board will display all shots that have been taken by attacking player and any hits
+4. Beside each players board will be a small 'legend' with the ships (they will be squares. ie. 5 squares for biggest ship) and for each square that has been hit, unlight it (default will be colored in / lit up)
+5. Top of the page will display the current players turn.
+
+Gameplay
+-----------------------------------------
+1. Take turns shooting at any square that has not already been shot at
+2. If you hit a ship, you get to go again.
+3. If you kill a ship, the squares surrounding all light up (basically they all get shot at)
+4. Game is over when a player destroys all opposing ships.
+5. When game is over display a victory modal for the winner. Have a 'Return to Menu' button.
+
+
+TODO
+--------------
+-Plan how I'm going to structure the code.
