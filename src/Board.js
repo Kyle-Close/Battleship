@@ -50,7 +50,6 @@ export class Board {
 
     // We know this spot is valid, set the isValidPlacement property of the surrounding squares
     this.setIsValidPlacementSurrounding(occupied);
-    console.log(this._board);
   }
 
   getOccupiedSquares(coords, isVertical, size) {
@@ -153,9 +152,9 @@ export class Board {
       );
     });
 
-    // Filter out any negative coordinates
+    // Filter out any negative coordinates && filter anything greater than 9 (end of board right side)
     const finalResult = removedDuplicates.filter((item) => {
-      return item[0] >= 0 && item[1] >= 0;
+      return item[0] >= 0 && item[0] < 10 && item[1] >= 0 && item[1] < 10;
     });
 
     // Set the isValidPlacement property on squares

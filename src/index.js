@@ -1,4 +1,5 @@
 import { Board } from "./Board";
+import { StateManager, GameState } from "./StateManager";
 
 let testBoard = new Board();
 
@@ -15,5 +16,18 @@ let testBoard = new Board();
 
 //testBoard.setIsValidPlacementSurrounding(arr);
 
-testBoard.placeShip([0, 2], true, 3);
-testBoard.placeShip([5, 2], false, 4);
+//testBoard.placeShip([0, 2], true, 3);
+//testBoard.placeShip([0, 9], false, 4);
+
+const stateManager = new StateManager();
+
+const singlePlayerButton = document.querySelector(".single-player-button");
+const playGameButton = document.querySelector(".play-game-button");
+
+singlePlayerButton.addEventListener("click", () => {
+  stateManager.changeState(GameState.MENU_SINGLE);
+});
+
+playGameButton.addEventListener("click", () => {
+  stateManager.changeState(GameState.PLACE_SHIPS);
+});
