@@ -66,7 +66,7 @@ export class StateManager {
   }
 
   hideMenuSingle() {
-    const menuDiv = document.querySelector(".single-player");
+    const menuDiv = document.querySelector(".container-menu");
     menuDiv.style.display = "none";
   }
 }

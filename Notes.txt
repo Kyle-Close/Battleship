@@ -1,0 +1,2 @@
+Change color to rgb(97, 233, 120);
+Change opacity to 0.5
