@@ -1,9 +1,16 @@
+import { eventListeners } from ".";
+
 const GRID_SIZE = 100;
 
 export class DOMHandler {
   constructor() {
     this.placeShipsGridContainer = document.querySelector(".your-grid");
   }
+
+  displayHighlight() {
+    // Highlights the where the currently selected ship would be placed.
+  }
+
   displayPlaceShipsGrid(board) {
     console.log(board);
     // Functionality to display board on place ships screen.
@@ -11,8 +18,14 @@ export class DOMHandler {
     this.clearPlaceShipsGrid();
     // 2. Create and place 100 squares on the grid
     this.createGridSquares();
-    // 3. Add the correct CSS class to change the colors
+    // 3. Add event listeners to the squares
+    this.addPlaceShipsEventListeners();
+    // 4. Add the correct CSS class to change the colors
     this.setSquareClasses(board);
+  }
+
+  addPlaceShipsEventListeners() {
+    eventListeners.initPlaceShipEventListener(3, false);
   }
 
   setSquareClasses(board) {
