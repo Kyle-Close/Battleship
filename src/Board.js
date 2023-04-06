@@ -1,10 +1,15 @@
 import { Square } from "./Square";
 import { Ship } from "./Ship";
+import { globalDOM } from ".";
 
 export class Board {
   constructor() {
     this._board = this.initEmptyBoard();
     this._ships = this.initShips();
+  }
+
+  displayBoard() {
+    globalDOM.displayPlaceShipsGrid(this._board);
   }
 
   initEmptyBoard() {
@@ -45,11 +50,34 @@ export class Board {
 
     if (!isValid) return;
 
+    // At this point we are certain the placement is valid
     // Get the coordinates of the squares the ship will occupy
     const occupied = this.getOccupiedSquares(startCoords, isVertical, size);
 
-    // We know this spot is valid, set the isValidPlacement property of the surrounding squares
-    this.setIsValidPlacementSurrounding(occupied);
+    // Get a list of coordinates for only surrounding squares
+    const surrounding = this.getSurroundingCoords(occupied);
+
+    // Set the [hasShip] property to true for each square the ship will occupy
+    this.setHasShipSquares(occupied);
+
+    // Set the isAdjacent property of Squares surrounding the ship
+    this.setAdjacentSquares(surrounding);
+  }
+
+  setHasShipSquares(occupiedSquares) {
+    occupiedSquares.forEach((coordinates) => {
+      let x = coordinates[0];
+      let y = coordinates[1];
+      this._board[x][y].hasShip = true;
+    });
+  }
+
+  setAdjacentSquares(surrounding) {
+    surrounding.forEach((coorinates) => {
+      let x = coorinates[0];
+      let y = coorinates[1];
+      this._board[x][y].isAdjacent = true;
+    });
   }
 
   getOccupiedSquares(coords, isVertical, size) {
@@ -88,7 +116,8 @@ export class Board {
     occupied.forEach((coords) => {
       let x = coords[0];
       let y = coords[1];
-      if (!this._board[x][y].isValidPlacement) isValid = false;
+      if (this._board[x][y].hasShip || this._board[x][y].isAdjacent)
+        isValid = false;
     });
     return isValid;
   }
@@ -112,12 +141,13 @@ export class Board {
     occupied.forEach((coords) => {
       let x = coords[0];
       let y = coords[1];
-      if (!this._board[x][y].isValidPlacement) isValid = false;
+      if (this._board[x][y].hasShip || this._board[x][y].isAdjacent)
+        isValid = false;
     });
     return isValid;
   }
 
-  setIsValidPlacementSurrounding(occupiedSquares) {
+  getSurroundingCoords(occupiedSquares) {
     // occupiedSquares is a list of coordinates that the ship will occupy
     // ie. [3, 3], [2, 3], [1, 3], [0, 3]
 
@@ -153,15 +183,18 @@ export class Board {
     });
 
     // Filter out any negative coordinates && filter anything greater than 9 (end of board right side)
-    const finalResult = removedDuplicates.filter((item) => {
+    const allUnavailableSquares = removedDuplicates.filter((item) => {
       return item[0] >= 0 && item[0] < 10 && item[1] >= 0 && item[1] < 10;
     });
 
-    // Set the isValidPlacement property on squares
-    finalResult.forEach((coords) => {
-      let x = coords[0];
-      let y = coords[1];
-      this._board[x][y].isValidPlacement = false;
-    });
+    // Finally, filter out the original squares that the ship occupies.
+    // Convert each coordinate pair in arrayB to a string representation
+    const stringifiedArrayOriginal = occupiedSquares.map((pair) =>
+      pair.toString()
+    );
+    const surroundingSquares = allUnavailableSquares.filter(
+      (pair) => !stringifiedArrayOriginal.includes(pair.toString())
+    );
+    return surroundingSquares;
   }
 }

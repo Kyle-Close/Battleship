@@ -58,7 +58,6 @@ export function initPlaceShips() {
       setCurrentActiveYourShip(e.target.parentElement);
       // Remove currently active from display
       hideCurrentlyPlacing();
-      console.log(e.target.classList);
       const selectedShip = getSelectedShip(e);
       highlightSelectedShip(e);
 

@@ -1,13 +1,10 @@
-import { Board } from "./Board";
+import { Player, AI } from "./Player";
 
 export class Game {
-  constructor(type, primaryPlayer, secondaryPlayer) {
-    this._type = type;
-    this._primaryPlayer = primaryPlayer;
-    if (secondaryPlayer) this._secondaryPlayer = secondaryPlayer;
-    else this._secondaryPlayer = null;
-    this._primaryPlayerBoard = new Board();
-    this._secondaryPlayerBoard = new Board();
+  constructor(primaryPlayer, secondaryPlayer) {
+    this._primaryPlayer = Player(primaryPlayer);
+    if (secondaryPlayer) this._secondaryPlayer = Player(secondaryPlayer);
+    else this._secondaryPlayer = AI(secondaryPlayer);
     this._turn = null;
   }
 }
