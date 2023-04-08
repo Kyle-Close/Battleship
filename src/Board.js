@@ -8,6 +8,10 @@ export class Board {
     this._ships = this.initShips();
   }
 
+  get ships() {
+    return this._ships;
+  }
+
   displayBoard() {
     globalDOM.displayPlaceShipsGrid(this._board);
   }
@@ -26,19 +30,19 @@ export class Board {
   initShips() {
     let shipArr = [];
     // 1 size {4} ship
-    shipArr.push(new Ship(4, 0, false));
+    shipArr.push(new Ship("4a", 4, 0, false));
     // 2 size {3} ships
-    shipArr.push(new Ship(3, 0, false));
-    shipArr.push(new Ship(3, 0, false));
+    shipArr.push(new Ship("3a", 3, 0, false));
+    shipArr.push(new Ship("3b", 3, 0, false));
     // 3 size {2} ships
-    shipArr.push(new Ship(2, 0, false));
-    shipArr.push(new Ship(2, 0, false));
-    shipArr.push(new Ship(2, 0, false));
+    shipArr.push(new Ship("2a", 2, 0, false));
+    shipArr.push(new Ship("2b", 2, 0, false));
+    shipArr.push(new Ship("2c", 2, 0, false));
     // 4 size {1} ships
-    shipArr.push(new Ship(1, 0, false));
-    shipArr.push(new Ship(1, 0, false));
-    shipArr.push(new Ship(1, 0, false));
-    shipArr.push(new Ship(1, 0, false));
+    shipArr.push(new Ship("1a", 1, 0, false));
+    shipArr.push(new Ship("1b", 1, 0, false));
+    shipArr.push(new Ship("1c", 1, 0, false));
+    shipArr.push(new Ship("1d", 1, 0, false));
 
     return shipArr;
   }
@@ -48,7 +52,7 @@ export class Board {
       ? this.isValidVertical(startCoords, size)
       : this.isValidHorizontal(startCoords, size);
 
-    if (!isValid) return;
+    if (!isValid) return false;
 
     // At this point we are certain the placement is valid
     // Get the coordinates of the squares the ship will occupy
@@ -62,6 +66,7 @@ export class Board {
 
     // Set the isAdjacent property of Squares surrounding the ship
     this.setAdjacentSquares(surrounding);
+    return true;
   }
 
   setHasShipSquares(occupiedSquares) {

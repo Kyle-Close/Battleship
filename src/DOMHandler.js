@@ -1,14 +1,10 @@
-import { eventListeners } from ".";
+import { eventListeners, game } from ".";
 
 const GRID_SIZE = 100;
 
 export class DOMHandler {
   constructor() {
     this.placeShipsGridContainer = document.querySelector(".your-grid");
-  }
-
-  displayHighlight() {
-    // Highlights the where the currently selected ship would be placed.
   }
 
   displayPlaceShipsGrid(board) {
@@ -25,7 +21,7 @@ export class DOMHandler {
   }
 
   addPlaceShipsEventListeners() {
-    eventListeners.initPlaceShipEventListener(3, false);
+    eventListeners.initPlaceShipEventListener(game.primaryPlayer._board, "4a");
   }
 
   setSquareClasses(board) {
@@ -61,6 +57,7 @@ export class DOMHandler {
     for (let i = 0; i < GRID_SIZE; i++) {
       const square = document.createElement("div");
       square.classList.add("default-square");
+      square.dataset.index = i;
       this.placeShipsGridContainer.appendChild(square);
     }
   }

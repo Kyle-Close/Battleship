@@ -1,4 +1,16 @@
 import { StateManager, GameState } from "./StateManager";
+import {
+  setIsVerticalState,
+  getIsVerticalState,
+  isAllShipsPlaced,
+  getActiveShipLength,
+  removeSelectedYourShip,
+} from "./PlaceShips";
+import { game } from ".";
+
+// For tmrw
+// Got placing somewhat working. Its not updating the isVertical after placing I think.
+// So placing horizontal is wonky
 
 export class EventListeners {
   constructor() {
@@ -16,45 +28,103 @@ export class EventListeners {
     this.lastHighlighted = [];
   }
 
-  initPlaceShipEventListener(length, isVertical) {
-    // For tmrw
-    // Instead of passing in length and isVertical I should make some sort of object to hold the current selected ship and it's size and rotation.
-    // The obj can be just for PlaceShips page to hold some info we need.
-
-    for (let i = 0; i < this.placeShipsGridContainer.children.length; i++) {
-      const cell = this.placeShipsGridContainer.children[i];
-
-      cell.addEventListener("mouseover", (e) => {
-        if (e.target == this.lastHighlighted[0]) return;
-        this.clearLastHighlighted();
-        if (isVertical) {
-          for (let j = 0; j < length; j++) {
-            const nextIndex = i - 10 * j;
-            if (nextIndex >= 0) {
-              const nextSquareToHighlight =
-                this.placeShipsGridContainer.children[nextIndex];
-              this.lastHighlighted.push(nextSquareToHighlight);
-              nextSquareToHighlight.id = "highlight";
-            } else {
-              this.clearLastHighlighted();
-            }
-          }
+  initToggleOrientation() {
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "r") {
+        if (getIsVerticalState()) {
+          setIsVerticalState(false);
+          this.updateHighlightedCells(this.lastHighlighted[0], true);
         } else {
-          for (let j = 0; j < length; j++) {
-            const nextIndex = i - 1 * j;
-            const lastDigit = nextIndex % 10;
-            if (j === 0 && lastDigit - (length - 1) < 0) {
-              this.clearLastHighlighted();
-              return;
-            }
-            const nextSquareToHighlight =
-              this.placeShipsGridContainer.children[nextIndex];
-            this.lastHighlighted.push(nextSquareToHighlight);
-            nextSquareToHighlight.id = "highlight";
-          }
+          setIsVerticalState(true);
+          this.updateHighlightedCells(this.lastHighlighted[0], true);
         }
-      });
+      }
+    });
+  }
+
+  updateHighlightedCells(cell, isOnToggle) {
+    if (cell == this.lastHighlighted[0] && !isOnToggle) return;
+    if (
+      cell.classList.contains("has-ship") ||
+      cell.classList.contains("is-adjacent")
+    ) {
+      return;
     }
+
+    const length = getActiveShipLength();
+    const index = cell.dataset.index;
+
+    this.clearLastHighlighted();
+
+    if (getIsVerticalState() && fitsOnBoard(index, length, true)) {
+      for (let j = 0; j < length; j++) {
+        const nextIndex = index - 10 * j;
+        if (nextIndex >= 0) {
+          const nextSquareToHighlight =
+            this.placeShipsGridContainer.children[nextIndex];
+          this.lastHighlighted.push(nextSquareToHighlight);
+          nextSquareToHighlight.id = "highlight";
+        } else {
+          this.clearLastHighlighted();
+        }
+      }
+    } else if (!getIsVerticalState()) {
+      if (!fitsOnBoard(index, length, false)) {
+        this.clearLastHighlighted();
+        return;
+      }
+
+      for (let j = 0; j < length; j++) {
+        const nextIndex = index - 1 * j;
+        const nextSquareToHighlight =
+          this.placeShipsGridContainer.children[nextIndex];
+        this.lastHighlighted.push(nextSquareToHighlight);
+        nextSquareToHighlight.id = "highlight";
+      }
+    }
+  }
+
+  handleCellMouseOver(cell, length) {
+    // Bind the onMouseOver function to the current instance and pass the length parameter
+    const boundOnMouseOver = (e) =>
+      this.updateHighlightedCells(e.target, length);
+    cell.addEventListener("mouseover", boundOnMouseOver);
+  }
+
+  handleClick(cell) {
+    // Create a bound function that will call this.placeShip when the event is triggered
+    const boundOnClick = () => this.placeShip(cell);
+    cell.addEventListener("click", boundOnClick);
+  }
+
+  placeShip(cell) {
+    // Check if all ships have been placed already
+    if (isAllShipsPlaced()) return;
+
+    // Convert cell index to 2d array coordinates
+    const isVertical = getIsVerticalState();
+    const length = getActiveShipLength();
+    const startingCoords = indexToCoordinates(cell.dataset.index);
+
+    if (
+      game._primaryPlayer._board.placeShip(startingCoords, isVertical, length)
+    ) {
+      removeSelectedYourShip();
+    }
+    game._primaryPlayer._board.displayBoard();
+  }
+
+  initPlaceShipEventListener(board, currentlySelectedId) {
+    // Get currently selected ship
+    const ship = board.ships.find((ship) => ship.id === currentlySelectedId);
+    const length = ship.length;
+
+    const cellList = this.placeShipsGridContainer.querySelectorAll("div");
+
+    cellList.forEach((cell) => {
+      this.handleCellMouseOver(cell, length);
+      this.handleClick(cell);
+    });
   }
 
   clearLastHighlighted() {
@@ -86,4 +156,30 @@ export class EventListeners {
   initSourceCodeButton() {
     this.sourceCodeButton.addEventListener("click", () => {});
   }
+}
+
+function fitsOnBoard(index, length, isVertical) {
+  if (isVertical) {
+    // Check if the length would cause wrapping to the previous row
+    const topRowIndex = index - 10 * (length - 1);
+    if (topRowIndex < 0) {
+      return false;
+    }
+  } else {
+    // Check if the length would cause wrapping to the previous column
+    const firstSquareIndex = index - (length - 1);
+    const firstSquareColumn = firstSquareIndex % 10;
+    const lastSquareColumn = index % 10;
+
+    if (firstSquareIndex < 0 || firstSquareColumn > lastSquareColumn) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function indexToCoordinates(index) {
+  const x = index % 10;
+  const y = Math.floor(index / 10);
+  return [x, y];
 }
