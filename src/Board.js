@@ -12,8 +12,11 @@ export class Board {
     return this._ships;
   }
 
-  displayBoard() {
-    globalDOM.displayPlaceShipsGrid(this._board);
+  displayBoard(location) {
+    if (location === "place ships")
+      globalDOM.displayPlaceShipsGrid(this._board);
+    else if (location === "play game your grid")
+      globalDOM.displayPlayGameYourGrid(this._board);
   }
 
   initEmptyBoard() {

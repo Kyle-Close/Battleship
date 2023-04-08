@@ -29,9 +29,11 @@ export class StateManager {
         break;
       case GameState.PLACE_SHIPS:
         // Show the place ships screen.
+        this.displayPlaceShips();
         break;
       case GameState.PLAY_GAME:
         // Show the play game screen.
+        this.displayPlayGame();
         break;
       default:
         console.error("Invalid state:", state);
@@ -47,6 +49,8 @@ export class StateManager {
       case GameState.MENU_SINGLE:
         this.hideMenuSingle();
         break;
+      case GameState.PLACE_SHIPS:
+        this.hidePlaceShips();
     }
   }
 
@@ -68,5 +72,30 @@ export class StateManager {
   hideMenuSingle() {
     const menuDiv = document.querySelector(".container-menu");
     menuDiv.style.display = "none";
+  }
+
+  hideMenuContainer() {
+    const menuDiv = document.querySelector(".container-menu");
+    menuDiv.style.display = "none";
+  }
+
+  displayPlaceShips() {
+    const container = document.querySelector(".container-place-ships");
+    container.style.display = "grid";
+  }
+
+  hidePlaceShips() {
+    const container = document.querySelector(".container-place-ships");
+    container.style.display = "none";
+  }
+
+  displayPlayGame() {
+    const container = document.querySelector(".container-play-game");
+    container.style.display = "grid";
+  }
+
+  hidePlayGame() {
+    const container = document.querySelector(".container-play-game");
+    container.style.display = "none";
   }
 }

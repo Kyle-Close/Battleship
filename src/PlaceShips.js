@@ -58,7 +58,12 @@ export function removeSelectedYourShip() {
     }
   }
   // Set new active ship to the first ship left in the array
-  if (yourShipsArray.length > 0) setActiveYourShip(yourShipsArray[0]);
+  if (yourShipsArray.length > 0) {
+    setActiveYourShip(yourShipsArray[0]);
+    hideCurrentlyPlacing();
+    const selectedShip = getSelectedShip(yourShipsArray[0]);
+    updateCurrentlyPlacing(selectedShip);
+  }
 }
 
 function setPlacedShipId() {
@@ -87,9 +92,8 @@ export function getYourActiveShip() {
   return activeYourShip;
 }
 
-function getSelectedShip(e) {
-  const parentDiv = e.target.parentElement;
-  switch (parentDiv.classList[1]) {
+function getSelectedShip(ship) {
+  switch (ship.classList[1]) {
     case "size-4":
       currentlyActiveShipPlacement = SHIP_4;
       return document.querySelector(".current-ship-4");
@@ -141,7 +145,7 @@ function handleYourShipsClicks(e) {
   // Remove currently Placing from display
   hideCurrentlyPlacing();
   // Set currently placing to the ship that was clicked
-  const selectedShip = getSelectedShip(e);
+  const selectedShip = getSelectedShip(e.target.parentElement);
   updateCurrentlyPlacing(selectedShip);
 }
 

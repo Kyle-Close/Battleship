@@ -8,10 +8,6 @@ import {
 } from "./PlaceShips";
 import { game } from ".";
 
-// For tmrw
-// Got placing somewhat working. Its not updating the isVertical after placing I think.
-// So placing horizontal is wonky
-
 export class EventListeners {
   constructor() {
     this.stateManager = new StateManager();
@@ -25,6 +21,7 @@ export class EventListeners {
       ".primary-player-error"
     );
     this.placeShipsGridContainer = document.querySelector(".your-grid");
+    this.confirmShipPlacementButton = document.querySelector(".confirm-button");
     this.lastHighlighted = [];
   }
 
@@ -39,6 +36,12 @@ export class EventListeners {
           this.updateHighlightedCells(this.lastHighlighted[0], true);
         }
       }
+    });
+  }
+
+  initConfirmShipPlacementButton() {
+    this.confirmShipPlacementButton.addEventListener("click", () => {
+      this.stateManager.changeState(GameState.PLAY_GAME);
     });
   }
 
@@ -111,7 +114,15 @@ export class EventListeners {
     ) {
       removeSelectedYourShip();
     }
-    game._primaryPlayer._board.displayBoard();
+    game._primaryPlayer._board.displayBoard("place ships");
+
+    // Check if this was the last ship to be placed. If it is, enable confirm button
+    if (isAllShipsPlaced()) {
+      // Enable the confirm button
+      let confirmButton = document.querySelector(".confirm-button");
+      // enable the button when some condition is met
+      confirmButton.disabled = false;
+    }
   }
 
   initPlaceShipEventListener(board, currentlySelectedId) {

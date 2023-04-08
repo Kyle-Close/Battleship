@@ -19,7 +19,7 @@ export class Square {
     return this._ship;
   }
   set isShot(value) {
-    this.isShot = value;
+    this._isShot = value;
   }
   get isShot() {
     return this._isShot;
