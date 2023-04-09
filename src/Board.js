@@ -17,6 +17,8 @@ export class Board {
       globalDOM.displayPlaceShipsGrid(this._board);
     else if (location === "play game your grid")
       globalDOM.displayPlayGameYourGrid(this._board);
+    else if (location === "play game enemy grid")
+      globalDOM.displayPlayGameEnemyGrid(this._board);
   }
 
   initEmptyBoard() {
@@ -50,7 +52,7 @@ export class Board {
     return shipArr;
   }
 
-  placeShip(startCoords, isVertical, size) {
+  placeShip(startCoords, isVertical, size, ship) {
     const isValid = isVertical
       ? this.isValidVertical(startCoords, size)
       : this.isValidHorizontal(startCoords, size);
@@ -67,9 +69,20 @@ export class Board {
     // Set the [hasShip] property to true for each square the ship will occupy
     this.setHasShipSquares(occupied);
 
+    // Set the [ship] property for each square the ship will occupy
+    this.setShipSquares(occupied, ship);
+
     // Set the isAdjacent property of Squares surrounding the ship
     this.setAdjacentSquares(surrounding);
     return true;
+  }
+
+  setShipSquares(occupiedSquares, ship) {
+    occupiedSquares.forEach((coordinates) => {
+      let x = coordinates[0];
+      let y = coordinates[1];
+      this._board[x][y].ship = ship;
+    });
   }
 
   setHasShipSquares(occupiedSquares) {
@@ -204,5 +217,45 @@ export class Board {
       (pair) => !stringifiedArrayOriginal.includes(pair.toString())
     );
     return surroundingSquares;
+  }
+
+  /**
+   * Calculates the sum of two numbers.
+   *
+   * @param {coords[0]} x - coordinate of the shot on the column axis.
+   * @param {coords[1]} y - coordinate of the shot on the row axis.
+   * @returns {result} result has 3 return possibilities.
+   *                    0: the square was already shot at
+   *                    1: the shot missed any ships
+   *                    Ship: the shot hit a ship, return the ship object it hit
+   */
+
+  recieveShot(coords) {
+    let result;
+    const x = coords[0];
+    const y = coords[1];
+    const square = this._board[x][y];
+
+    if (square.isShot) result = 0;
+    else {
+      // We know this is now a valid spot to shoot
+      // 1. Set the isShot property on the square
+      square.isShot = true;
+      // 2. Check if the square hit a ship
+      if (square.hasShip) {
+        // If it does, get the ship it hit
+        const hitShip = square.ship;
+        result = hitShip;
+        // Increment [timesHit] property of the ship
+        hitShip.incrementTimesHit();
+        // Check if the ship has been sunk
+        if (hitShip.isSunk) {
+          hitShip.isSunk = true;
+        }
+      } else {
+        result = 1;
+      }
+    }
+    return result;
   }
 }

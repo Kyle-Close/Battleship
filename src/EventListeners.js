@@ -5,6 +5,7 @@ import {
   isAllShipsPlaced,
   getActiveShipLength,
   removeSelectedYourShip,
+  activeYourShip,
 } from "./PlaceShips";
 import { game } from ".";
 
@@ -87,10 +88,9 @@ export class EventListeners {
     }
   }
 
-  handleCellMouseOver(cell, length) {
+  handleCellMouseOver(cell) {
     // Bind the onMouseOver function to the current instance and pass the length parameter
-    const boundOnMouseOver = (e) =>
-      this.updateHighlightedCells(e.target, length);
+    const boundOnMouseOver = (e) => this.updateHighlightedCells(e.target);
     cell.addEventListener("mouseover", boundOnMouseOver);
   }
 
@@ -98,6 +98,25 @@ export class EventListeners {
     // Create a bound function that will call this.placeShip when the event is triggered
     const boundOnClick = () => this.placeShip(cell);
     cell.addEventListener("click", boundOnClick);
+  }
+
+  getSelectedShipId(activeYourShip) {
+    let result;
+    if (activeYourShip.classList.contains("size-4")) result = "4a";
+    else if (activeYourShip.classList.contains("size-3")) {
+      if (activeYourShip.classList.contains("one")) result = "3a";
+      else if (activeYourShip.classList.contains("two")) result = "3b";
+    } else if (activeYourShip.classList.contains("size-2")) {
+      if (activeYourShip.classList.contains("one")) result = "2a";
+      else if (activeYourShip.classList.contains("two")) result = "2b";
+      else if (activeYourShip.classList.contains("three")) result = "2c";
+    } else if (activeYourShip.classList.contains("size-1")) {
+      if (activeYourShip.classList.contains("one")) result = "1a";
+      else if (activeYourShip.classList.contains("two")) result = "1b";
+      else if (activeYourShip.classList.contains("three")) result = "1c";
+      else if (activeYourShip.classList.contains("four")) result = "1d";
+    }
+    return result;
   }
 
   placeShip(cell) {
@@ -109,9 +128,23 @@ export class EventListeners {
     const length = getActiveShipLength();
     const startingCoords = indexToCoordinates(cell.dataset.index);
 
+    // Get the currently selected ships ID
+    const selectedShipId = this.getSelectedShipId(activeYourShip);
+    // Send the ship to place ship function on the board.
+    const index = findIndexById(
+      game.primaryPlayer._board._ships,
+      selectedShipId
+    );
+    const ship = game.primaryPlayer._board.ships[index];
     if (
-      game._primaryPlayer._board.placeShip(startingCoords, isVertical, length)
+      game._primaryPlayer._board.placeShip(
+        startingCoords,
+        isVertical,
+        length,
+        ship
+      )
     ) {
+      console.log(game.primaryPlayer._board);
       removeSelectedYourShip();
     }
     game._primaryPlayer._board.displayBoard("place ships");
@@ -125,15 +158,11 @@ export class EventListeners {
     }
   }
 
-  initPlaceShipEventListener(board, currentlySelectedId) {
-    // Get currently selected ship
-    const ship = board.ships.find((ship) => ship.id === currentlySelectedId);
-    const length = ship.length;
-
+  initPlaceShipEventListener() {
     const cellList = this.placeShipsGridContainer.querySelectorAll("div");
 
     cellList.forEach((cell) => {
-      this.handleCellMouseOver(cell, length);
+      this.handleCellMouseOver(cell);
       this.handleClick(cell);
     });
   }
@@ -193,4 +222,14 @@ function indexToCoordinates(index) {
   const x = index % 10;
   const y = Math.floor(index / 10);
   return [x, y];
+}
+
+function findIndexById(arr, id) {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i].id === id) {
+      return i;
+    }
+  }
+  // if no match is found, return -1
+  return -1;
 }

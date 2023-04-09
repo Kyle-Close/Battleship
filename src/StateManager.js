@@ -1,3 +1,5 @@
+import { game } from ".";
+
 export const GameState = {
   MENU: "menu",
   MENU_SINGLE: "single",
@@ -67,6 +69,7 @@ export class StateManager {
   displayMenuSingle() {
     const menuDiv = document.querySelector(".single-player");
     menuDiv.style.display = "grid";
+    game.primaryPlayer._board.displayBoard("place ships");
   }
 
   hideMenuSingle() {
@@ -92,6 +95,11 @@ export class StateManager {
   displayPlayGame() {
     const container = document.querySelector(".container-play-game");
     container.style.display = "grid";
+
+    game.secondaryPlayer.placeShipsOnBoard();
+
+    game.primaryPlayer._board.displayBoard("play game your grid");
+    game.secondaryPlayer._board.displayBoard("play game enemy grid");
   }
 
   hidePlayGame() {

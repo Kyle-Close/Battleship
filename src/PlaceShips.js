@@ -42,7 +42,7 @@ let yourShipsArray = [
   SHIPS_1D,
 ];
 
-let activeYourShip = SHIPS_4A;
+export let activeYourShip = SHIPS_4A;
 let currentlyActiveShipPlacement = SHIP_4;
 
 export function removeSelectedYourShip() {

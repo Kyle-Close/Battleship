@@ -9,4 +9,21 @@ export class Ship {
   get length() {
     return this._length;
   }
+
+  incrementTimesHit() {
+    this._timesHit++;
+  }
+
+  get timesHit() {
+    return this._timesHit;
+  }
+
+  get isSunk() {
+    if (this._timesHit >= this._length) return true;
+    else return false;
+  }
+
+  set isSunk(value) {
+    this._isSunk = value;
+  }
 }

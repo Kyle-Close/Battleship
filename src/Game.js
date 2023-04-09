@@ -18,9 +18,21 @@ export class Game {
         primaryBoard
       );
     else this._secondaryPlayer = new AI(secondaryBoard, primaryBoard);
-    this._turn = null;
+    this._turn = 0;
   }
   get primaryPlayer() {
     return this._primaryPlayer;
+  }
+
+  get secondaryPlayer() {
+    return this._secondaryPlayer;
+  }
+
+  set turn(value) {
+    this._turn = value;
+  }
+
+  get turn() {
+    return this._turn;
   }
 }
