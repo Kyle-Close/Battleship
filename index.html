@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="./main.js"></script>
+    <title>Battleship</title>
+  </head>
+  <body>
+    <div class="container-menu">
+      <div class="title"><h1>BATTLESHIP</h1></div>
+      <div class="content">
+        <div class="play-options">
+          <div class="play-options-inner">
+            <button class="single-player-button">SINGLE PLAYER</button>
+          </div>
+        </div>
+        <div class="single-player">
+          <div class="single-player-inner">
+            <h2>SINGLE PLAYER</h2>
+            <form class="primary-player-name-form" action="">
+              <label for="primary-player-name"></label>
+              <div class="primary-input-with-error">
+                <input
+                  type="text"
+                  name="primary-player-name"
+                  id="primary-player-name"
+                  placeholder="Player Name"
+                />
+                <p class="primary-player-error">
+                  * You must enter a name to play *
+                </p>
+              </div>
+            </form>
+            <button class="play-game-button">PLAY GAME</button>
+          </div>
+        </div>
+        <div class="extra-info">
+          <div class="source-code">
+            <a
+              class="source-code-link"
+              href="https://github.com/Kyle-Close/Battleship"
+              >SOURCE CODE</a
+            >
+          </div>
+          <div class="created-by">CREATED BY: KYLE CLOSE</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Place Ships Screen -->
+
+    <div class="container-place-ships">
+      <div class="top">
+        <div class="place-ships-left">
+          <h1 class="place-ships-text">Place Ships</h1>
+        </div>
+        <button class="confirm-button" disabled>CONFIRM</button>
+      </div>
+      <div class="middle">
+        <div class="left">
+          <div class="tool-tips">
+            <img
+              src="./img/lightbulb.svg"
+              alt="Lightbulb indicating tooltip section"
+              width="60"
+            />
+            <ul>
+              <li>Left click to place ship</li>
+              <li>Press 'R' key to rotate ship on the grid</li>
+              <li>Ships must have a minimum 1-square gap around them</li>
+            </ul>
+          </div>
+        </div>
+        <div class="right">
+          <h3 class="currently-placing-text">Currently Placing</h3>
+          <div class="current-ship-undo-section">
+            <div class="current-ship">
+              <div class="current-ship-4">
+                <div class="current-square"></div>
+                <div class="current-square"></div>
+                <div class="current-square"></div>
+                <div class="current-square"></div>
+              </div>
+              <div class="current-ship-3">
+                <div class="current-square"></div>
+                <div class="current-square"></div>
+                <div class="current-square"></div>
+              </div>
+              <div class="current-ship-2">
+                <div class="current-square"></div>
+                <div class="current-square"></div>
+              </div>
+              <div class="current-ship-1">
+                <div class="current-square"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bottom">
+        <div class="your-ships">
+          <div class="your-ships-text">
+            <h3>Your Ships</h3>
+          </div>
+          <div class="your-ships-legend">
+            <div class="ship size-4 one active">
+              <div class="square"></div>
+              <div class="square"></div>
+              <div class="square"></div>
+              <div class="square"></div>
+            </div>
+            <div class="ship size-3 one">
+              <div class="square"></div>
+              <div class="square"></div>
+              <div class="square"></div>
+            </div>
+            <div class="ship size-3 two">
+              <div class="square"></div>
+              <div class="square"></div>
+              <div class="square"></div>
+            </div>
+            <div class="ship size-2 one">
+              <div class="square"></div>
+              <div class="square"></div>
+            </div>
+            <div class="ship size-2 two">
+              <div class="square"></div>
+              <div class="square"></div>
+            </div>
+            <div class="ship size-2 three">
+              <div class="square"></div>
+              <div class="square"></div>
+            </div>
+            <div class="ship size-1 one">
+              <div class="square"></div>
+            </div>
+            <div class="ship size-1 two">
+              <div class="square"></div>
+            </div>
+            <div class="ship size-1 three">
+              <div class="square"></div>
+            </div>
+            <div class="ship size-1 four">
+              <div class="square"></div>
+            </div>
+          </div>
+        </div>
+        <div class="your-grid"></div>
+      </div>
+    </div>
+
+    <!-- Play Game Screen -->
+
+    <div class="container-play-game">
+      <div class="play-game-top">
+        <h1>BATTLESHIP</h1>
+      </div>
+      <div class="play-game-bottom">
+        <div class="play-game play-game-your-side">
+          <div class="play-game-container play-game-your-side-container">
+            <h4>Friendly Waters</h4>
+            <div class="play-game-board play-game-your-board"></div>
+            <div class="remaining-ships your-remaining-ships">
+              <h5>Remaining Ships</h5>
+              <div class="remaining-ships-legend">
+                <div class="remaining-ship size-4 one active">
+                  <div class="square"></div>
+                  <div class="square"></div>
+                  <div class="square"></div>
+                  <div class="square"></div>
+                </div>
+                <div class="remaining-ship size-3 one">
+                  <div class="square"></div>
+                  <div class="square"></div>
+                  <div class="square"></div>
+                </div>
+                <div class="remaining-ship size-3 two">
+                  <div class="square"></div>
+                  <div class="square"></div>
+                  <div class="square"></div>
+                </div>
+                <div class="remaining-ship size-2 one">
+                  <div class="square"></div>
+                  <div class="square"></div>
+                </div>
+                <div class="remaining-ship size-2 two">
+                  <div class="square"></div>
+                  <div class="square"></div>
+                </div>
+                <div class="remaining-ship size-2 three">
+                  <div class="square"></div>
+                  <div class="square"></div>
+                </div>
+                <div class="remaining-ship size-1 one">
+                  <div class="square"></div>
+                </div>
+                <div class="remaining-ship size-1 two">
+                  <div class="square"></div>
+                </div>
+                <div class="remaining-ship size-1 three">
+                  <div class="square"></div>
+                </div>
+                <div class="remaining-ship size-1 four">
+                  <div class="square"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="play-game play-game-enemy-side">
+          <div class="play-game-container play-game-enemy-side-container">
+            <h4>Enemy Waters</h4>
+            <div class="play-game-board play-game-enemy-board"></div>
+            <div class="remaining-ships enemy-remaining-ships">
+              <h5>Remaining Ships</h5>
+              <div class="remaining-ships-legend enemy-remaining-ships-legend">
+                <div class="remaining-ship size-4 one active">
+                  <div class="square"></div>
+                  <div class="square"></div>
+                  <div class="square"></div>
+                  <div class="square"></div>
+                </div>
+                <div class="remaining-ship size-3 one">
+                  <div class="square"></div>
+                  <div class="square"></div>
+                  <div class="square"></div>
+                </div>
+                <div class="remaining-ship size-3 two">
+                  <div class="square"></div>
+                  <div class="square"></div>
+                  <div class="square"></div>
+                </div>
+                <div class="remaining-ship size-2 one">
+                  <div class="square"></div>
+                  <div class="square"></div>
+                </div>
+                <div class="remaining-ship size-2 two">
+                  <div class="square"></div>
+                  <div class="square"></div>
+                </div>
+                <div class="remaining-ship size-2 three">
+                  <div class="square"></div>
+                  <div class="square"></div>
+                </div>
+                <div class="remaining-ship size-1 one">
+                  <div class="square"></div>
+                </div>
+                <div class="remaining-ship size-1 two">
+                  <div class="square"></div>
+                </div>
+                <div class="remaining-ship size-1 three">
+                  <div class="square"></div>
+                </div>
+                <div class="remaining-ship size-1 four">
+                  <div class="square"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
